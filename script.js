@@ -67,7 +67,7 @@ function updateCartModal() {
           <p>Qtd: ${item.quantity}</p>
           <p class="font-medium mt-2">R$ ${item.price.toFixed(2)}</p>
         </div>
-        <button>Remover</button>
+        <button class="bg-red-500 rounded px-3 remove-from-cart-btn" data-name="${item.name}">Remover</button>
       </div>
     `
     total += item.price * item.quantity
@@ -80,4 +80,51 @@ function updateCartModal() {
   })
 
   cartCount.innerHTML = cart.length
+}
+
+cartItemsContainer.addEventListener("click", function(event) {
+  if(event.target.classList.contains("remove-from-cart-btn")) {
+    const name = event.target.getAttribute("data-name")
+    removeItemCart(name)
+  }
+})
+
+function removeItemCart(nome) {
+  const index = cart.findIndex(item => item.name === nome) 
+
+  if(index !== -1) {
+    const item = cart[index]
+    if(item.quantity > 1) {
+      item.quantity -= 1
+      updateCartModal()
+      return
+    }
+
+    cart.splice(index, 1)
+    updateCartModal()
+  }
+}
+
+addressInput.addEventListener("input", function(event) {
+  let inputValue = event.target.value
+
+  if(inputValue !== "") {
+    addressInput.classList.remove("border-red-500")
+    addressWarn.classList.add("hidden")
+  }
+})
+
+checkoutBtn.addEventListener("click", function() {
+  if(cart.length === 0) return
+  if(addressInput.value === "") {
+    addressWarn.classList.remove("hidden")
+    addressInput.classList.add("border-red-500")
+    return
+  }
+})
+
+function checkRestaurantOpen() {
+  const data = new Date()
+  const hora = data.getHours()
+  
 }
