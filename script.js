@@ -146,7 +146,7 @@ checkoutBtn.addEventListener("click", function() {
   }).join("")
 
   const message = encodeURIComponent(cartItems)
-  const phone = ""
+  const phone = "94992147394"
 
   window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
 
@@ -158,7 +158,7 @@ checkoutBtn.addEventListener("click", function() {
 function checkRestaurantOpen() {
   const data = new Date()
   const hora = data.getHours()
-  return hora >= 11 && hora < 22
+  return hora >= 10 && hora < 22
 }
 
 const spanItem = document.getElementById("date-span")
