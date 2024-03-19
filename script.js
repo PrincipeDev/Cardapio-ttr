@@ -115,16 +115,59 @@ addressInput.addEventListener("input", function(event) {
 })
 
 checkoutBtn.addEventListener("click", function() {
+  const isOpen = checkRestaurantOpen()
+  if(!isOpen) {
+    Toastify({
+      text: "RESTAURANTE FECHADO NO MOMENTO!",
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+      onClick: function(){} // Callback after click
+    }).showToast();
+    return
+  }
+
   if(cart.length === 0) return
   if(addressInput.value === "") {
     addressWarn.classList.remove("hidden")
     addressInput.classList.add("border-red-500")
     return
   }
+
+  const cartItems = cart.map((item) => {
+    return (
+      ` ${item.name} Quantidade: (${item.quantity}) Preço: R$ ${item.price} |`
+    )
+  }).join("")
+
+  const message = encodeURIComponent(cartItems)
+  const phone = ""
+
+  window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
+
+  cart = []
+  addressInput.value = ""
+  updateCartModal()
 })
 
 function checkRestaurantOpen() {
   const data = new Date()
   const hora = data.getHours()
-  
+  return hora >= 11 && hora < 22
+}
+
+const spanItem = document.getElementById("date-span")
+const isOpen = checkRestaurantOpen()
+
+if(isOpen) {
+  spanItem.classList.remove("bg-red-500")
+  spanItem.classList.add("bg-green-600")
+} else {
+  spanItem.classList.remove("bg-green-600")
+  spanItem.classList.add("bg-red-500")
 }
